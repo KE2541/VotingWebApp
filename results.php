@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Election Results - Voting System</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/admin.css">
+</head>
+<body class="results-page">
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.php" class="nav-brand">Voting System</a>
+            <button class="nav-toggle" onclick="toggleNav()">&#9776;</button>
+            <div class="nav-links">
+                <a href="index.php" target="_blank" rel="noopener">Vote Now</a>
+                <a href="results.php" class="active">Live Results</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="page-header">
+            <h1>Live Election Results</h1>
+            <div class="header-right">
+                <div class="live-indicator">
+                    <span class="dot"></span> <span id="lastUpdated">Updating...</span>
+                </div>
+                <div id="resultTimer" class="countdown-timer" style="display:none;">
+                    <span class="timer-label">Voting Ends In</span>
+                    <span id="resultCountdown" class="countdown-display">--</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="summary-cards">
+            <div class="summary-card total">
+                <h3>Total Voters</h3>
+                <p id="pubTotalVoters">0</p>
+            </div>
+            <div class="summary-card voted">
+                <h3>Votes Cast</h3>
+                <p id="pubVotersVoted">0</p>
+            </div>
+            <div class="summary-card turnout">
+                <h3>Turnout</h3>
+                <p id="pubTurnoutPct">0%</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h2>Election Results Dashboard</h2>
+                <div class="result-filter-bar">
+                    <span class="badge badge-success">Auto-refreshing every 10s</span>
+                    <select id="pubPositionFilter" class="form-control" onchange="loadPublicResults()">
+                        <option value="0">All Positions</option>
+                    </select>
+                </div>
+            </div>
+
+            <div id="pubResultsContainer" class="results-container">
+                <div class="text-center text-muted" style="padding:40px;">Loading results...</div>
+            </div>
+        </div>
+    </div>
+
+    <div id="toastContainer" class="toast-container"></div>
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="spinner spinner-lg"></div>
+        <p id="loadingText">Loading...</p>
+    </div>
+    <footer style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;padding:16px 24px;border-top:1px solid var(--border);margin-top:24px;font-size:13px;color:var(--text-muted);">
+        <p>Online Voting System &mdash; Live Results</p>
+        <span style="font-size:16px;color:#1565c0;font-weight:600;">Powered by Timex Systems</span>
+    </footer>
+    <script src="assets/js/config.js"></script>
+    <script src="assets/js/results.js"></script>
+</body>
+</html>

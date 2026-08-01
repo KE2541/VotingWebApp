@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Voting System</title>
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="../assets/css/admin.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="../vote.html" class="nav-brand">Voting System</a>
+            <button class="nav-toggle" onclick="toggleNav()">&#9776;</button>
+            <div class="nav-links">
+                <a href="index.html" class="active">Admin Panel</a>
+                <a href="../vote.html" target="_blank" rel="noopener">User Voting</a>
+                <a href="../results.html" target="_blank" rel="noopener">Live Results</a>
+                <button onclick="adminLogout()" class="btn btn-sm btn-danger">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <div id="loginSection" class="container">
+        <div class="card" style="max-width: 400px; margin: 60px auto;">
+            <h2>Admin Login</h2>
+            <form id="loginForm" onsubmit="return adminLogin(event)">
+                <div class="form-group">
+                    <label>Username</label>
+                    <input type="text" id="loginUsername" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="loginPassword" class="form-control" required>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Login</button>
+                <p id="loginError" class="text-danger mt-2" style="display:none;"></p>
+            </form>
+        </div>
+    </div>
+
+    <div id="adminDashboard" style="display:none;">
+        <div class="container">
+            <div class="page-header">
+                <h1>Election Dashboard</h1>
+                <div class="live-indicator">
+                    <span class="dot"></span> Live
+                </div>
+            </div>
+
+            <div class="tab-bar">
+                <button class="tab-btn active" onclick="switchTab('candidates')">Candidates</button>
+                <button class="tab-btn" onclick="switchTab('voters')">Voters</button>
+                <button class="tab-btn" onclick="switchTab('settings')">Election Settings</button>
+                <button class="tab-btn" onclick="switchTab('transfer')">Transfer</button>
+                <button class="tab-btn" onclick="switchTab('results')">Results</button>
+            </div>
+
+            <div id="tab-candidates" class="tab-content active">
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Enroll Candidate</h2>
+                    </div>
+                    <div class="position-levels-info">
+                        <strong>Position Levels:</strong>
+                        <span class="level-tag national">President = Kenya</span>
+                        <span class="level-tag county">Governor, Senator, Women Rep = County</span>
+                        <span class="level-tag constituency">MP = Constituency</span>
+                        <span class="level-tag ward">MCA = Ward</span>
+                    </div>
+                    <form id="candidateForm" onsubmit="return addCandidate(event)">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Candidate Name</label>
+                                <input type="text" id="candidateName" class="form-control" required placeholder="Full name">
+                            </div>
+                            <div class="form-group">
+                                <label>Position <small class="text-muted">(level shown in dropdown)</small></label>
+                                <select id="candidatePosition" class="form-control" required onchange="updateLocationField(this, 'candidate')"></select>
+                            </div>
+                            <div class="form-group">
+                                <label>Party / Affiliation</label>
+                                <input type="text" id="candidateParty" class="form-control" placeholder="e.g. Party A">
+                            </div>
+                            <div class="form-group location-field" id="candidateLocationCountyGroup" style="display:none;">
+                                <label>County</label>
+                                <select id="candidateLocationCounty" class="form-control" onchange="onCountyChange('candidate')">
+                                    <option value="">-- Select County --</option>
+                                    <option value="Mombasa">1. Mombasa</option>
+                                    <option value="Kwale">2. Kwale</option>
+                                    <option value="Kilifi">3. Kilifi</option>
+                                    <option value="Tana River">4. Tana River</option>
+                                    <option value="Lamu">5. Lamu</option>
+                                    <option value="Taita Taveta">6. Taita Taveta</option>
+                                    <option value="Garissa">7. Garissa</option>
+                                    <option value="Wajir">8. Wajir</option>
+                                    <option value="Mandera">9. Mandera</option>
+                                    <option value="Marsabit">10. Marsabit</option>
+                                    <option value="Isiolo">11. Isiolo</option>
+                                    <option value="Turkana">12. Turkana</option>
+                                    <option value="Meru">13. Meru</option>
+                                    <option value="Tharaka Nithi">14. Tharaka Nithi</option>
+                                    <option value="Embu">15. Embu</option>
+                                    <option value="Kitui">16. Kitui</option>
+                                    <option value="Makueni">17. Makueni</option>
+                                    <option value="Machakos">18. Machakos</option>
+                                    <option value="Nairobi">19. Nairobi</option>
+                                    <option value="Nyeri">20. Nyeri</option>
+                                    <option value="Kiambu">21. Kiambu</option>
+                                    <option value="Murang'a">22. Murang'a</option>
+                                    <option value="Kirinyaga">23. Kirinyaga</option>
+                                    <option value="Samburu">24. Samburu</option>
+                                    <option value="Baringo">25. Baringo</option>
+                                    <option value="Laikipia">26. Laikipia</option>
+                                    <option value="Nyandarua">27. Nyandarua</option>
+                                    <option value="Kajiado">28. Kajiado</option>
+                                    <option value="Narok">29. Narok</option>
+                                    <option value="Nakuru">30. Nakuru</option>
+                                    <option value="Uasin Gishu">31. Uasin Gishu</option>
+                                    <option value="Nandi">32. Nandi</option>
+                                    <option value="Kericho">33. Kericho</option>
+                                    <option value="Bomet">34. Bomet</option>
+                                    <option value="Kisii">35. Kisii</option>
+                                    <option value="Nyamira">36. Nyamira</option>
+                                    <option value="Migori">37. Migori</option>
+                                    <option value="Homa Bay">38. Homa Bay</option>
+                                    <option value="Siaya">39. Siaya</option>
+                                    <option value="Kisumu">40. Kisumu</option>
+                                    <option value="Busia">41. Busia</option>
+                                    <option value="Kakamega">42. Kakamega</option>
+                                    <option value="Vihiga">43. Vihiga</option>
+                                    <option value="Bungoma">44. Bungoma</option>
+                                    <option value="Trans Nzoia">45. Trans Nzoia</option>
+                                    <option value="West Pokot">46. West Pokot</option>
+                                    <option value="Elgeyo Marakwet">47. Elgeyo Marakwet</option>
+                                </select>
+                            </div>
+                            <div class="form-group location-field" id="candidateLocationConstituencyGroup" style="display:none;">
+                                <label>Constituency <small class="text-muted">(for MP / MCA)</small></label>
+                                <select id="candidateLocationConstituency" class="form-control" onchange="onConstituencyChange('candidate')">
+                                    <option value="">-- Select County first --</option>
+                                </select>
+                            </div>
+                            <div class="form-group location-field" id="candidateLocationWardGroup" style="display:none;">
+                                <label>Ward <small class="text-muted">(for MCA)</small></label>
+                                <select id="candidateLocationWard" class="form-control" onchange="syncLocationInput('candidate')">
+                                    <option value="">-- Select Constituency first --</option>
+                                </select>
+                            </div>
+                            <div class="form-group location-field" id="candidateLocationTextGroup">
+                                <label>Ward <small class="text-muted">(for MCA, manually)</small></label>
+                                <input type="text" id="candidateLocationText" class="form-control" placeholder="e.g. Kitisuru" oninput="syncLocationInput('candidate')">
+                            </div>
+                            <input type="hidden" id="candidateLocation" value="">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Passport Photo</label>
+                                    <input type="file" id="candidatePhoto" class="form-control" accept="image/*" onchange="prependImage(this, 'candidatePhotoPreview')">
+                                    <img id="candidatePhotoPreview" class="photo-preview" style="display:none;">
+                                </div>
+                                <div class="form-group">
+                                    <label>Party Symbol</label>
+                                    <input type="file" id="candidateSymbol" class="form-control" accept="image/*" onchange="prependImage(this, 'candidateSymbolPreview')">
+                                    <img id="candidateSymbolPreview" class="photo-preview" style="display:none;">
+                                </div>
+                            </div>
+                            <div class="form-group" style="align-self: flex-end;">
+                                <button type="submit" class="btn btn-primary">Add Candidate</button>
+                            </div>
+                        </div>
+                    </form>
+                    <p id="candidateMsg" class="mt-2" style="display:none;"></p>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Enrolled Candidates</h2>
+                        <div class="form-group" style="margin:0;min-width:200px;">
+                            <select id="filterPosition" class="form-control" onchange="loadCandidates()">
+                                <option value="0">All Positions</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Photo</th>
+                                        <th>Name</th>
+                                        <th>Position</th>
+                                        <th>Level</th>
+                                        <th>Location</th>
+                                        <th>Party</th>
+                                        <th>Symbol</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="candidateTableBody"></tbody>
+                            </table>
+                    </div>
+                </div>
+            </div>
+
+            <div id="tab-voters" class="tab-content">
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Registered Voters</h2>
+                        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+                            <span id="voterCount" class="badge badge-info"></span>
+                            <button onclick="openVoterModal()" class="btn btn-primary btn-sm btn-register-voter">+ Register Voter</button>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr><th>#</th><th>Full Name</th><th>Voter ID</th><th>Location</th><th>Status</th><th>Face</th><th>Registered</th><th>Action</th></tr>
+                            </thead>
+                            <tbody id="voterTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div id="tab-settings" class="tab-content">
+                <div class="card">
+                    <div class="card-header"><h2>Election Time Settings</h2></div>
+                    <form id="settingsForm" onsubmit="return updateSettings(event)">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Start Time</label>
+                                <input type="datetime-local" id="startTime" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label>End Time</label>
+                                <input type="datetime-local" id="endTime" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="isActive" checked>
+                                Enable Voting
+                            </label>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Save Settings</button>
+                        <p id="settingsMsg" class="mt-2" style="display:none;"></p>
+                    </form>
+                </div>
+
+                <div class="card">
+                    <div class="card-header"><h2>Quick Controls</h2></div>
+                    <p class="text-muted">Start or stop voting immediately. This overrides the scheduled times above.</p>
+                    <div class="quick-controls">
+                        <button id="startVotingBtn" onclick="startVoting()" class="btn btn-success btn-lg">
+                            <span class="btn-icon">&#9654;</span> Start Voting
+                        </button>
+                        <button id="stopVotingBtn" onclick="stopVoting()" class="btn btn-danger btn-lg">
+                            <span class="btn-icon">&#9632;</span> Stop Voting
+                        </button>
+                    </div>
+                    <p id="quickMsg" class="mt-2" style="display:none;"></p>
+                    <div id="adminTimer" class="admin-timer" style="display:none;">
+                        <span>Voting ends in:</span>
+                        <span id="adminCountdown" class="countdown-display"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div id="tab-transfer" class="tab-content">
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Voter Transfer</h2>
+                    </div>
+                    <div class="card-body">
+                        <form id="transferSearchForm" onsubmit="return searchVoterForTransfer(event)">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Search Voter by ID or Name</label>
+                                    <input type="text" id="transferSearchInput" class="form-control" required placeholder="Voter ID or full name">
+                                </div>
+                                <div class="form-group" style="align-self: flex-end;">
+                                    <button type="submit" class="btn btn-primary">Search</button>
+                                </div>
+                            </div>
+                        </form>
+                        <p id="transferSearchMsg" class="mt-2" style="display:none;"></p>
+                    </div>
+
+                    <div id="transferVoterInfo" class="card-body" style="display:none;border-top:1px solid var(--border);padding-top:16px;">
+                        <h3 style="color:var(--success);margin-bottom:12px;">&#10004; Voter Found</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Full Name</label>
+                                <p id="transferVoterName" class="form-control-static" style="font-weight:700;font-size:18px;color:var(--text);"></p>
+                            </div>
+                            <div class="form-group">
+                                <label>Voter ID</label>
+                                <p id="transferVoterId" class="form-control-static" style="font-size:16px;"></p>
+                            </div>
+                        </div>
+                        <input type="hidden" id="transferVoterDbId" value="">
+
+                        <div class="current-location-card">
+                            <div class="current-location-header">
+                                <span class="current-location-icon">&#128205;</span>
+                                <span>Current Registered Location</span>
+                            </div>
+                            <div class="current-location-value" id="transferCurrentLocation">-</div>
+                            <div class="current-location-hint">This voter can only cast votes for candidates in this location. Transfer to a new station below to change their voting location.</div>
+                        </div>
+
+                        <h3 style="margin-top:20px;margin-bottom:8px;">Transfer to New Station</h3>
+                        <p class="text-muted" style="font-size:13px;margin-bottom:12px;">Select the new County, Constituency, and Ward where this voter should vote.</p>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>County</label>
+                                <select id="transferCounty" class="form-control" onchange="populateTransferConstituencies()">
+                                    <option value="">-- Select County --</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Constituency</label>
+                                <select id="transferConstituency" class="form-control" onchange="populateTransferWards()">
+                                    <option value="">-- Select Constituency --</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Ward</label>
+                                <select id="transferWard" class="form-control">
+                                    <option value="">-- Select Ward --</option>
+                                </select>
+                            </div>
+                            <input type="hidden" id="transferNewLocation" value="">
+                        </div>
+                        <div class="form-group">
+                            <button onclick="processVoterTransfer()" class="btn btn-primary">Transfer Voter</button>
+                            <button onclick="resetTransferForm()" class="btn btn-outline" style="margin-left:8px;">Clear</button>
+                        </div>
+                        <p id="transferMsg" class="mt-2" style="display:none;"></p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Transfer History</h2>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr><th>#</th><th>Voter</th><th>From</th><th>To</th><th>Date</th></tr>
+                            </thead>
+                            <tbody id="transferHistoryBody">
+                                <tr><td colspan="5" class="text-muted">No transfers yet</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div id="tab-results" class="tab-content">
+                <div class="summary-cards">
+                    <div class="summary-card total">
+                        <h3>Total Voters</h3>
+                        <p id="totalVoters">0</p>
+                    </div>
+                    <div class="summary-card voted">
+                        <h3>Voters Voted</h3>
+                        <p id="votersVoted">0</p>
+                    </div>
+                    <div class="summary-card turnout">
+                        <h3>Turnout</h3>
+                        <p id="turnoutPct">0%</p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Live Results - Automated Tallying</h2>
+                        <span class="badge badge-success">Auto-refreshing every 10s</span>
+                    </div>
+
+                    <div class="results-container" id="resultsContainer"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="voterModal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <h3>Register Voter</h3>
+            <form id="voterForm" onsubmit="return addVoter(event)" novalidate>
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" id="voterFullName" class="form-control" required placeholder="Voter's full name">
+                </div>
+                <div class="form-group">
+                    <label>Voter ID</label>
+                    <input type="text" id="voterIdInput" class="form-control" required placeholder="9-digit National ID or Passport (e.g. A1234567)" pattern="(\d{6,9}|[A-Za-z]\d{7})" inputmode="text">
+                    <small class="text-muted">National ID: 6-9 digits &nbsp;|&nbsp; Passport: 1 letter + 7 digits</small>
+                </div>
+                <div class="form-group">
+                    <label>Registration Location (Ward)</label>
+                    <div class="form-row" style="gap:6px;">
+                        <select id="voterCounty" class="form-control" style="flex:1;" onchange="populateVoterConstituencies()">
+                            <option value="">-- County --</option>
+                        </select>
+                        <select id="voterConstituency" class="form-control" style="flex:1;" onchange="populateVoterWards()">
+                            <option value="">-- Constituency --</option>
+                        </select>
+                        <select id="voterWard" class="form-control" style="flex:1;">
+                            <option value="">-- Ward --</option>
+                        </select>
+                    </div>
+                    <input type="hidden" id="voterLocation" value="">
+                </div>
+                <div class="form-group">
+                    <label>Face Recognition (Includes Liveness Check & Tilt Detection)</label>
+                    <div class="face-capture-container">
+                        <video id="faceCaptureVideo" class="face-video" autoplay playsinline style="display:none;"></video>
+                        <canvas id="faceCaptureCanvas" class="face-canvas" style="display:none;"></canvas>
+                        <div class="liveness-progress" id="regLivenessProgress" style="display:none;">
+                            <div class="liveness-step" data-step="center">Center <span class="step-icon">&#9711;</span></div>
+                            <div class="liveness-step" data-step="blink">Blink Eyes <span class="step-icon">&#9711;</span></div>
+                            <div class="liveness-step" data-step="left">Left <span class="step-icon">&#9711;</span></div>
+                            <div class="liveness-step" data-step="right">Right <span class="step-icon">&#9711;</span></div>
+                            <div class="liveness-step" data-step="up">Up <span class="step-icon">&#9711;</span></div>
+                            <div class="liveness-step" data-step="down">Down <span class="step-icon">&#9711;</span></div>
+                        </div>
+                        <img id="facePreview" class="face-preview" style="display:none;" alt="Captured face">
+                        <p id="faceStatus" class="face-status"></p>
+                        <div class="face-actions">
+                            <button type="button" id="faceCaptureBtn" class="btn btn-primary face-capture-btn" onclick="captureFace()">Capture Face</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="voter-success-banner" id="voterSuccessBanner" style="display:none;">
+                    <span class="success-icon">&#10004;</span>
+                    <span id="voterSuccessText">Voter registered successfully!</span>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" onclick="closeVoterModal()" class="btn btn-outline">Cancel</button>
+                    <button type="submit" class="btn btn-primary" id="voterSubmitBtn">Register</button>
+                </div>
+                <p id="voterMsg" class="mt-2" style="display:none;"></p>
+            </form>
+        </div>
+    </div>
+
+    <div id="editModal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <h3>Edit Candidate</h3>
+            <form id="editCandidateForm" onsubmit="return updateCandidate(event)">
+                <input type="hidden" id="editCandidateId" value="">
+                <div class="form-group">
+                    <label>Candidate Name</label>
+                    <input type="text" id="editCandidateName" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label>Position</label>
+                    <select id="editCandidatePosition" class="form-control" required onchange="updateLocationField(this, 'editCandidate')"></select>
+                </div>
+                <div class="form-group">
+                    <label>Party / Affiliation</label>
+                    <input type="text" id="editCandidateParty" class="form-control">
+                </div>
+                <div class="form-group location-field" id="editCandidateLocationCountyGroup" style="display:none;">
+                    <label>County</label>
+                    <select id="editCandidateLocationCounty" class="form-control" onchange="onCountyChange('editCandidate')">
+                        <option value="">-- Select County --</option>
+                        <option value="Mombasa">Mombasa</option>
+                        <option value="Kwale">Kwale</option>
+                        <option value="Kilifi">Kilifi</option>
+                        <option value="Tana River">Tana River</option>
+                        <option value="Lamu">Lamu</option>
+                        <option value="Taita Taveta">Taita Taveta</option>
+                        <option value="Garissa">Garissa</option>
+                        <option value="Wajir">Wajir</option>
+                        <option value="Mandera">Mandera</option>
+                        <option value="Marsabit">Marsabit</option>
+                        <option value="Isiolo">Isiolo</option>
+                        <option value="Turkana">Turkana</option>
+                        <option value="Meru">Meru</option>
+                        <option value="Tharaka Nithi">Tharaka Nithi</option>
+                        <option value="Embu">Embu</option>
+                        <option value="Kitui">Kitui</option>
+                        <option value="Makueni">Makueni</option>
+                        <option value="Machakos">Machakos</option>
+                        <option value="Nairobi">Nairobi</option>
+                        <option value="Nyeri">Nyeri</option>
+                        <option value="Kiambu">Kiambu</option>
+                        <option value="Murang'a">Murang'a</option>
+                        <option value="Kirinyaga">Kirinyaga</option>
+                        <option value="Samburu">Samburu</option>
+                        <option value="Baringo">Baringo</option>
+                        <option value="Laikipia">Laikipia</option>
+                        <option value="Nyandarua">Nyandarua</option>
+                        <option value="Kajiado">Kajiado</option>
+                        <option value="Narok">Narok</option>
+                        <option value="Nakuru">Nakuru</option>
+                        <option value="Uasin Gishu">Uasin Gishu</option>
+                        <option value="Nandi">Nandi</option>
+                        <option value="Kericho">Kericho</option>
+                        <option value="Bomet">Bomet</option>
+                        <option value="Kisii">Kisii</option>
+                        <option value="Nyamira">Nyamira</option>
+                        <option value="Migori">Migori</option>
+                        <option value="Homa Bay">Homa Bay</option>
+                        <option value="Siaya">Siaya</option>
+                        <option value="Kisumu">Kisumu</option>
+                        <option value="Busia">Busia</option>
+                        <option value="Kakamega">Kakamega</option>
+                        <option value="Vihiga">Vihiga</option>
+                        <option value="Bungoma">Bungoma</option>
+                        <option value="Trans Nzoia">Trans Nzoia</option>
+                        <option value="West Pokot">West Pokot</option>
+                        <option value="Elgeyo Marakwet">Elgeyo Marakwet</option>
+                    </select>
+                </div>
+                <div class="form-group location-field" id="editCandidateLocationConstituencyGroup" style="display:none;">
+                    <label>Constituency <small class="text-muted">(for MP / MCA)</small></label>
+                    <select id="editCandidateLocationConstituency" class="form-control" onchange="onConstituencyChange('editCandidate')">
+                        <option value="">-- Select County first --</option>
+                    </select>
+                </div>
+                <div class="form-group location-field" id="editCandidateLocationWardGroup" style="display:none;">
+                    <label>Ward <small class="text-muted">(for MCA)</small></label>
+                    <select id="editCandidateLocationWard" class="form-control" onchange="syncLocationInput('editCandidate')">
+                        <option value="">-- Select Constituency first --</option>
+                    </select>
+                </div>
+                <div class="form-group location-field" id="editCandidateLocationTextGroup">
+                    <label>Ward <small class="text-muted">(for MCA, manually)</small></label>
+                    <input type="text" id="editCandidateLocationText" class="form-control" placeholder="e.g. Kitisuru" oninput="syncLocationInput('editCandidate')">
+                </div>
+                <input type="hidden" id="editCandidateLocation" value="">
+                <input type="hidden" id="editPhotoUrl" value="">
+                <input type="hidden" id="editPartySymbol" value="">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Passport Photo</label>
+                        <input type="file" id="editCandidatePhoto" class="form-control" accept="image/*" onchange="prependImage(this, 'editCandidatePhotoPreview')">
+                        <img id="editCandidatePhotoPreview" class="photo-preview" style="display:none;">
+                    </div>
+                    <div class="form-group">
+                        <label>Party Symbol</label>
+                        <input type="file" id="editCandidateSymbol" class="form-control" accept="image/*" onchange="prependImage(this, 'editCandidateSymbolPreview')">
+                        <img id="editCandidateSymbolPreview" class="photo-preview" style="display:none;">
+                    </div>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" onclick="closeEditModal()" class="btn btn-outline">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </div>
+                <p id="editMsg" class="mt-2" style="display:none;"></p>
+            </form>
+        </div>
+    </div>
+
+    <div id="toastContainer" class="toast-container"></div>
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="spinner spinner-lg"></div>
+        <p id="loadingText">Loading...</p>
+    </div>
+    <footer style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;padding:16px 24px;border-top:1px solid var(--border);margin-top:24px;font-size:13px;color:var(--text-muted);">
+        <p>Online Voting System &mdash; Admin Panel</p>
+        <span style="font-size:16px;color:#1565c0;font-weight:600;">Powered by Timex Systems</span>
+    </footer>
+    <script src="../assets/js/config.js"></script>
+    <script src="../assets/js/admin.js"></script>
+</body>
+</html>

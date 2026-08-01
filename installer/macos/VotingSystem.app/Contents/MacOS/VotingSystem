@@ -1,0 +1,7 @@
+#!/bin/bash
+# ============================================================================
+#  Voting System - macOS App Bundle Entry Point
+#  This script is the executable inside VotingSystem.app
+# ============================================================================
+DIR="$(cd "$(dirname "$0")/../../../" && pwd)"
+exec "$DIR/start-voting-system.command"

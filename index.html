@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Voting System</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <style>
+        .hero {
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+            color: #fff;
+            padding: 60px 24px;
+            text-align: center;
+            border-radius: 0 0 24px 24px;
+            margin: -24px -24px 24px;
+        }
+        .hero h1 {
+            font-size: 40px;
+            font-weight: 800;
+            margin-bottom: 12px;
+            letter-spacing: -1px;
+        }
+        .hero p {
+            font-size: 18px;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto 24px;
+        }
+        .hero-icon {
+            font-size: 56px;
+            margin-bottom: 16px;
+            display: block;
+        }
+        .hero-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 20px;
+            border-radius: 24px;
+            font-size: 14px;
+            font-weight: 600;
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(4px);
+        }
+        .hero-status .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #4caf50;
+            animation: pulse 1.5s infinite;
+        }
+        .hero-status .dot.inactive {
+            background: #ef5350;
+            animation: none;
+        }
+        .hero-status .dot.loading {
+            background: #ffa726;
+            animation: pulse 1.5s infinite;
+        }
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 32px;
+        }
+        .feature-card {
+            background: var(--card-bg);
+            border: 2px solid var(--border);
+            border-radius: var(--radius);
+            padding: 32px 24px;
+            text-align: center;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+            box-shadow: var(--shadow);
+        }
+        .feature-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-4px);
+            box-shadow: 0 8px 30px rgba(46,125,50,0.15);
+        }
+        .feature-card .f-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+            display: block;
+        }
+        .feature-card h3 {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--primary-dark);
+        }
+        .feature-card p {
+            font-size: 14px;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+        .feature-card .btn {
+            margin-top: 16px;
+        }
+        .info-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        .info-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 20px;
+            box-shadow: var(--shadow);
+        }
+        .info-card h4 {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+        .info-card .value {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--primary-dark);
+        }
+        .info-card .value.loading {
+            color: var(--text-muted);
+            font-size: 16px;
+        }
+        footer {
+            text-align: center;
+            padding: 24px;
+            color: var(--text-muted);
+            font-size: 13px;
+            border-top: 1px solid var(--border);
+            margin-top: 16px;
+        }
+        footer a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+        @media (max-width: 768px) {
+            .hero {
+                padding: 40px 16px;
+                margin: -12px -12px 16px;
+                border-radius: 0 0 16px 16px;
+            }
+            .hero h1 {
+                font-size: 28px;
+            }
+            .hero p {
+                font-size: 15px;
+            }
+            .features {
+                grid-template-columns: 1fr;
+            }
+            .info-section {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 24px;
+            }
+            .hero-icon {
+                font-size: 40px;
+            }
+            .info-section {
+                grid-template-columns: 1fr;
+            }
+            .feature-card {
+                padding: 24px 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="nav-brand">Voting System</a>
+            <button class="nav-toggle" onclick="toggleNav()">&#9776;</button>
+            <div class="nav-links">
+                <a href="index.html" class="active">Home</a>
+                <a href="vote.html" target="_blank" rel="noopener">Vote Now</a>
+                <a href="results.html" target="_blank" rel="noopener">Live Results</a>
+                <a href="admin/index.html">Admin</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="hero">
+            <span class="hero-icon">&#x2714;</span>
+            <h1>Online Voting System</h1>
+            <p>A secure, transparent, and modern electronic voting platform with face verification and real-time results.</p>
+            <div class="hero-status" id="heroStatus">
+                <span class="dot loading" id="statusDot"></span>
+                <span id="statusText">Loading election status...</span>
+            </div>
+        </div>
+
+        <div class="features">
+            <a href="vote.html" target="_blank" rel="noopener" class="feature-card">
+                <span class="f-icon">&#x1F5F3;</span>
+                <h3>Cast Your Vote</h3>
+                <p>Vote securely using our face verification system. Select your location, verify your identity, and cast your ballot for your preferred candidates.</p>
+                <span class="btn btn-primary">Vote Now &rarr;</span>
+            </a>
+            <a href="results.html" target="_blank" rel="noopener" class="feature-card">
+                <span class="f-icon">&#x1F4CA;</span>
+                <h3>Live Results</h3>
+                <p>View real-time election results as votes are cast. See the turnout, per-position breakdowns, and winner highlights.</p>
+                <span class="btn btn-primary">View Results &rarr;</span>
+            </a>
+            <a href="admin/index.html" class="feature-card">
+                <span class="f-icon">&#x2699;</span>
+                <h3>Admin Panel</h3>
+                <p>Manage candidates, register voters, configure election settings, and monitor the election process from a central dashboard.</p>
+                <span class="btn btn-primary">Admin Login &rarr;</span>
+            </a>
+        </div>
+
+        <div class="info-section" id="statsSection">
+            <div class="info-card">
+                <h4>Total Voters</h4>
+                <div class="value loading" id="totalVoters">Loading...</div>
+            </div>
+            <div class="info-card">
+                <h4>Votes Cast</h4>
+                <div class="value loading" id="votesCast">Loading...</div>
+            </div>
+            <div class="info-card">
+                <h4>Voter Turnout</h4>
+                <div class="value loading" id="voterTurnout">Loading...</div>
+            </div>
+            <div class="info-card">
+                <h4>Candidates</h4>
+                <div class="value loading" id="totalCandidates">Loading...</div>
+            </div>
+        </div>
+    </div>
+
+    <footer style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
+        <p>Online Voting System &mdash; Built with &#x2764; for secure and transparent elections</p>
+        <span style="font-size:16px;color:#1565c0;font-weight:600;">Powered by Timex Systems</span>
+    </footer>
+
+    <script src="assets/js/config.js"></script>
+    <script>
+        function toggleNav() {
+            document.querySelector('.nav-links').classList.toggle('open');
+        }
+
+        async function loadDashboard() {
+            try {
+                const [resultsRes, candidatesRes, votersRes] = await Promise.all([
+                    fetch(API_BASE + '/api/results.php'),
+                    fetch(API_BASE + '/api/candidates.php'),
+                    fetch(API_BASE + '/api/voters.php')
+                ]);
+                const results = await resultsRes.json();
+                const candidates = await candidatesRes.json();
+                const voters = await votersRes.json();
+
+                const totalVoters = voters?.total || voters?.length || 0;
+                const totalCandidates = candidates?.length || candidates?.total || 0;
+                const votesCast = results?.total_votes || 0;
+                const turnout = totalVoters > 0 ? ((votesCast / totalVoters) * 100).toFixed(1) : '0.0';
+
+                document.getElementById('totalVoters').textContent = totalVoters.toLocaleString();
+                document.getElementById('totalVoters').className = 'value';
+                document.getElementById('votesCast').textContent = votesCast.toLocaleString();
+                document.getElementById('votesCast').className = 'value';
+                document.getElementById('voterTurnout').textContent = turnout + '%';
+                document.getElementById('voterTurnout').className = 'value';
+                document.getElementById('totalCandidates').textContent = totalCandidates.toLocaleString();
+                document.getElementById('totalCandidates').className = 'value';
+            } catch (e) {
+                document.querySelectorAll('.info-card .value').forEach(el => {
+                    el.textContent = 'Unavailable';
+                    el.className = 'value';
+                });
+            }
+        }
+
+        async function loadElectionStatus() {
+            try {
+                const res = await fetch(API_BASE + '/api/settings.php');
+                const data = await res.json();
+                const dot = document.getElementById('statusDot');
+                const text = document.getElementById('statusText');
+
+                if (data?.is_active) {
+                    dot.className = 'dot';
+                    const now = Date.now();
+                    const end = new Date(data.end_time).getTime();
+                    if (end > now) {
+                        text.textContent = 'Voting is currently OPEN';
+                    } else {
+                        text.textContent = 'Voting has ended';
+                        dot.className = 'dot inactive';
+                    }
+                } else {
+                    dot.className = 'dot inactive';
+                    text.textContent = 'Voting is currently CLOSED';
+                }
+            } catch (e) {
+                document.getElementById('statusDot').className = 'dot inactive';
+                document.getElementById('statusText').textContent = 'Could not load election status';
+            }
+        }
+
+        loadElectionStatus();
+        loadDashboard();
+    </script>
+</body>
+</html>
